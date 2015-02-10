@@ -17,9 +17,4 @@ if($called_position !== 'before_module_init') return;
 
 require_once 'session_shield.class.php';
 $shield = new Session_Shield();
-if (!$shield->isSessionActive()) return;
-if (!$shield->isShieldEnabled()) return;
-
 $shield->initialize();
-if (!$shield->checkCookies()) return;
-if (!$shield->checkTimeout()) return;

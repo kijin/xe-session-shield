@@ -90,17 +90,25 @@ class Session_Shield
 	 */
 	public function initialize()
 	{
+		if(!$this->isSessionActive()) return false;
+		if(!$this->isShieldEnabled()) return true;
+		
 		if(!isset($_SESSION[self::ARRAY_KEY]))
 		{
 			$_SESSION[self::ARRAY_KEY] = array(
 				'init' => self::INIT_LEVEL_NONE,
-				'cookie' => '',
-				'cookie_ssl' => '',
+				'cookie' => $this->getRandomString(),
+				'cookie_ssl' => $this->isSecureRequest() ? $this->getRandomString() : '',
 				'last_refresh' => time(),
 				'need_refresh' => false,
 				'member_srl' => $this->getMemberSrl(),
 			);
+			$this->setShieldCookies();
+			return true;
 		}
+		
+		if(!$this->checkCookies()) return false;
+		if(!$this->checkTimeout()) return false;
 		return true;
 	}
 	
@@ -111,13 +119,7 @@ class Session_Shield
 	 */
 	public function checkCookies()
 	{
-		if($_SESSION[self::ARRAY_KEY]['init'] == self::INIT_LEVEL_NONE)
-		{
-			$_SESSION[self::ARRAY_KEY]['cookie'] = $this->getRandomString();
-			$_SESSION[self::ARRAY_KEY]['cookie_ssl'] = $this->isSecureRequest() ? $this->getRandomString() : '';
-			$this->setShieldCookies();
-			return true;
-		}
+		if($_SESSION[self::ARRAY_KEY]['init'] == self::INIT_LEVEL_NONE) return false;
 		
 		$cookie = isset($_COOKIE[self::COOKIE_NAME]) ? $_COOKIE[self::COOKIE_NAME] : false;
 		$cookie_ssl = isset($_COOKIE[self::COOKIE_NAME_SSL]) ? $_COOKIE[self::COOKIE_NAME_SSL] : false;
