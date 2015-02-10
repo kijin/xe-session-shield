@@ -21,6 +21,7 @@ class Session_Shield
 	const INIT_LEVEL_NONE = 0;
 	const INIT_LEVEL_BASIC = 1;
 	const INIT_LEVEL_SSL = 2;
+	const REFRESH_TIMEOUT = 300;
 	
 	/**
 	 * Check if the session is active.
@@ -150,7 +151,7 @@ class Session_Shield
 	 */
 	public function checkTimeout()
 	{
-		if($_SESSION[self::ARRAY_KEY]['need_refresh'] || $_SESSION[self::ARRAY_KEY]['last_refresh'] < time() - 300)
+		if($_SESSION[self::ARRAY_KEY]['need_refresh'] || $_SESSION[self::ARRAY_KEY]['last_refresh'] < time() - self::REFRESH_TIMEOUT)
 		{
 			$this->refreshSession();
 			return true;
@@ -212,7 +213,10 @@ class Session_Shield
 			$_SESSION[self::ARRAY_KEY]['need_refresh'] = false;
 			$_SESSION[self::ARRAY_KEY]['member_srl'] = $this->getMemberSrl();
 			$status = $this->setShieldCookies();
-			$status = $status & session_regenerate_id(true);
+			if($status && !$this->isStupidBrowser())
+			{
+				$status = session_regenerate_id(true);
+			}
 			return (bool)$status;
 		}
 	}
