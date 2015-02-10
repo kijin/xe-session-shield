@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon version="0.2">
+    <title xml:lang="ko">세션 쉴드</title>
+    <title xml:lang="en">Session Shield</title>
+    <title xml:lang="jp">セッションシールド</title>
+    <title xml:lang="zh-CN">会话盾</title>
+    <description xml:lang="ko">세션 보안을 강화합니다.</description>
+    <description xml:lang="en">This add-on improves session security.</description>
+    <description xml:lang="jp">セッションのセキュリティを強化します。</description>
+    <description xml:lang="zh-CN">要加强安全会话。</description>
+    <version>1.0</version>
+    <date>2015-02-12</date>
+    <author email_address="kijin@kijinsung.com" link="https://github.com/kijin">
+        <name xml:lang="ko">Kijin Sung</name>
+        <name xml:lang="en">Kijin Sung</name>
+        <name xml:lang="jp">Kijin Sung</name>
+        <name xml:lang="zh-CN">Kijin Sung</name>
+    </author>
+</addon>
