@@ -227,13 +227,16 @@ class Session_Shield
 	{
 		if(headers_sent()) return false;
 		
-		$_SESSION = array();
 		$params = session_get_cookie_params();
-		setcookie(session_name(), '', time() - 86400, $params['path'], $params['domain'], false, false);
 		setcookie(self::COOKIE_NAME, '', time() - 86400, $params['path'], $params['domain'], false, false);
 		setcookie(self::COOKIE_NAME_SSL, '', time() - 86400, $params['path'], $params['domain'], false, false);
-		session_destroy();
 		
+		$oMemberController = getController('member');
+		$oMemberController->destroySessionInfo();
+		Context::set('is_logged', false);
+		Context::set('logged_info', new stdClass());
+		
+		$_SESSION = array();
 		return true;
 	}
 	
