@@ -212,12 +212,7 @@ class Session_Shield
 			$_SESSION[self::ARRAY_KEY]['last_refresh'] = time();
 			$_SESSION[self::ARRAY_KEY]['need_refresh'] = false;
 			$_SESSION[self::ARRAY_KEY]['member_srl'] = $this->getMemberSrl();
-			$status = $this->setShieldCookies();
-			if($status && !$this->isStupidBrowser())
-			{
-				$status = session_regenerate_id(true);
-			}
-			return (bool)$status;
+			return $this->setShieldCookies();
 		}
 	}
 	
