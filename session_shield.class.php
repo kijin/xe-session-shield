@@ -48,7 +48,12 @@ class Session_Shield
 	public function isShieldEnabled()
 	{
 		$act = Context::get('act');
-		if($act === 'procFileUpload') return false;
+		$method = $_SERVER['REQUEST_METHOD'];
+		$ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+		if($act === 'procFileUpload' && $method !== 'GET' && strpos($ua, 'Shockwave Flash') !== false)
+		{
+			return false;
+		}
 		return true;
 	}
 	
