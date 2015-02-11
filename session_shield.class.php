@@ -82,6 +82,7 @@ class Session_Shield
 	 */
 	public function getMemberSrl()
 	{
+		if(!isset($_SESSION['is_logged']) || !$_SESSION['is_logged']) return 0;
 		return isset($_SESSION['member_srl']) ? intval($_SESSION['member_srl']) : 0;
 	}
 	
