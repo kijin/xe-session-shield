@@ -237,7 +237,7 @@ class Session_Shield
 		$oMemberController = getController('member');
 		$oMemberController->destroySessionInfo();
 		Context::set('is_logged', false);
-		Context::set('logged_info', new stdClass());
+		Context::set('logged_info', null);
 		
 		$_SESSION = array();
 		return true;
