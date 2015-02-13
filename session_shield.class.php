@@ -14,9 +14,9 @@ class Session_Shield
 	/**
 	 * Class constants
 	 */
-	const ARRAY_KEY = 'XE_SESSION_SHIELD';
-	const COOKIE_NAME = 'xe_sesh1';
-	const COOKIE_NAME_SSL = 'xe_sesh2';
+	const ARRAY_KEY = 'XE_SESSION_SHIELD_v1';
+	const COOKIE_NAME = 'xe_shield';
+	const COOKIE_NAME_SSL = 'xe_shield_ssl';
 	const COOKIE_HASH_ALGO = 'sha1';
 	const INIT_LEVEL_NONE = 0;
 	const INIT_LEVEL_BASIC = 1;
