@@ -241,9 +241,9 @@ class Session_Shield
 			$precomputed_random1 = $this->getRandomString();
 			$precomputed_random2 = $this->isSecureRequest() ? $this->getRandomString() : null;
 			
-			$previous_value = $SESSION[self::ARRAY_KEY]['cookie']['value'];
+			$previous_value = $_SESSION[self::ARRAY_KEY]['cookie']['value'];
 			session_write_close(); $_SESSION = array(); session_start();
-			if($SESSION[self::ARRAY_KEY]['cookie']['value'] !== $previous_value)
+			if($_SESSION[self::ARRAY_KEY]['cookie']['value'] !== $previous_value)
 			{
 				return false;
 			}
@@ -261,9 +261,9 @@ class Session_Shield
 			}
 			$_SESSION[self::ARRAY_KEY]['login'] = $this->getMemberSrl();
 			
-			$previous_value = $SESSION[self::ARRAY_KEY]['cookie']['value'];
+			$previous_value = $_SESSION[self::ARRAY_KEY]['cookie']['value'];
 			session_write_close(); $_SESSION = array(); session_start();
-			if($SESSION[self::ARRAY_KEY]['cookie']['value'] !== $previous_value)
+			if($_SESSION[self::ARRAY_KEY]['cookie']['value'] !== $previous_value)
 			{
 				return false;
 			}
