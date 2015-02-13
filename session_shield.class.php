@@ -238,6 +238,13 @@ class Session_Shield
 		}
 		else
 		{
+			$previous_value = $SESSION[self::ARRAY_KEY]['cookie']['value'];
+			session_write_close(); $_SESSION = array(); session_start();
+			if($SESSION[self::ARRAY_KEY]['cookie']['value'] !== $previous_value)
+			{
+				return false;
+			}
+			
 			$_SESSION[self::ARRAY_KEY]['cookie']['previous'] = $_SESSION[self::ARRAY_KEY]['cookie']['value'];
 			$_SESSION[self::ARRAY_KEY]['cookie']['value'] = $this->getRandomString();
 			$_SESSION[self::ARRAY_KEY]['cookie']['last_refresh'] = time();
@@ -250,6 +257,14 @@ class Session_Shield
 				$_SESSION[self::ARRAY_KEY]['cookie_ssl']['need_refresh'] = false;
 			}
 			$_SESSION[self::ARRAY_KEY]['login'] = $this->getMemberSrl();
+			
+			$previous_value = $SESSION[self::ARRAY_KEY]['cookie']['value'];
+			session_write_close(); $_SESSION = array(); session_start();
+			if($SESSION[self::ARRAY_KEY]['cookie']['value'] !== $previous_value)
+			{
+				return false;
+			}
+			
 			return $this->setShieldCookies();
 		}
 	}
