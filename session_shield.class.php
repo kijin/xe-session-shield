@@ -54,6 +54,10 @@ class Session_Shield
 		{
 			return false;
 		}
+		if(headers_sent())
+		{
+			return false;
+		}
 		return true;
 	}
 	
@@ -201,20 +205,34 @@ class Session_Shield
 	 */
 	public function setShieldCookies()
 	{
-		if(headers_sent()) return false;
-		
 		$params = session_get_cookie_params();
+		
 		if($_SESSION[self::ARRAY_KEY]['cookie']['value'] !== null)
 		{
-			setcookie(self::COOKIE_NAME, $_SESSION[self::ARRAY_KEY]['cookie']['value'],
+			$cookie_status = @setcookie(self::COOKIE_NAME, $_SESSION[self::ARRAY_KEY]['cookie']['value'],
 				$params['lifetime'], $params['path'], $params['domain'], false, true);
-			$_SESSION[self::ARRAY_KEY]['init'] = max($_SESSION[self::ARRAY_KEY]['init'], self::INIT_LEVEL_BASIC);
+			if($cookie_status)
+			{
+				$_SESSION[self::ARRAY_KEY]['init'] = max($_SESSION[self::ARRAY_KEY]['init'], self::INIT_LEVEL_BASIC);
+			}
+			else
+			{
+				return false;
+			}
 		}
+		
 		if($_SESSION[self::ARRAY_KEY]['cookie_ssl']['value'] !== null && $this->isSecureRequest())
 		{
-			setcookie(self::COOKIE_NAME_SSL, $_SESSION[self::ARRAY_KEY]['cookie_ssl']['value'],
+			$cookie_status = @setcookie(self::COOKIE_NAME_SSL, $_SESSION[self::ARRAY_KEY]['cookie_ssl']['value'],
 				$params['lifetime'], $params['path'], $params['domain'], true, true);
-			$_SESSION[self::ARRAY_KEY]['init'] = max($_SESSION[self::ARRAY_KEY]['init'], self::INIT_LEVEL_SSL);
+			if($cookie_status)
+			{
+				$_SESSION[self::ARRAY_KEY]['init'] = max($_SESSION[self::ARRAY_KEY]['init'], self::INIT_LEVEL_SSL);
+			}
+			else
+			{
+				return false;
+			}
 		}
 		
 		return true;
@@ -240,6 +258,11 @@ class Session_Shield
 		{
 			$precomputed_random1 = $this->getRandomString();
 			$precomputed_random2 = $this->isSecureRequest() ? $this->getRandomString() : null;
+			$previous_session = $_SESSION;
+			if(headers_sent())
+			{
+				return false;
+			}
 			
 			$previous_value = $_SESSION[self::ARRAY_KEY]['cookie']['value'];
 			session_write_close(); $_SESSION = array(); session_start();
@@ -268,7 +291,13 @@ class Session_Shield
 				return false;
 			}
 			
-			return $this->setShieldCookies();
+			$cookie_status = $this->setShieldCookies();
+			if(!$cookie_status)
+			{
+				$_SESSION = $previous_session;
+				session_write_close();
+				session_start();
+			}
 		}
 	}
 	
