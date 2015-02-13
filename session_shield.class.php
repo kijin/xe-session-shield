@@ -238,6 +238,9 @@ class Session_Shield
 		}
 		else
 		{
+			$precomputed_random1 = $this->getRandomString();
+			$precomputed_random2 = $this->isSecureRequest() ? $this->getRandomString() : null;
+			
 			$previous_value = $SESSION[self::ARRAY_KEY]['cookie']['value'];
 			session_write_close(); $_SESSION = array(); session_start();
 			if($SESSION[self::ARRAY_KEY]['cookie']['value'] !== $previous_value)
@@ -246,13 +249,13 @@ class Session_Shield
 			}
 			
 			$_SESSION[self::ARRAY_KEY]['cookie']['previous'] = $_SESSION[self::ARRAY_KEY]['cookie']['value'];
-			$_SESSION[self::ARRAY_KEY]['cookie']['value'] = $this->getRandomString();
+			$_SESSION[self::ARRAY_KEY]['cookie']['value'] = $precomputed_random1;
 			$_SESSION[self::ARRAY_KEY]['cookie']['last_refresh'] = time();
 			$_SESSION[self::ARRAY_KEY]['cookie']['need_refresh'] = false;
 			if($this->isSecureRequest())
 			{
 				$_SESSION[self::ARRAY_KEY]['cookie_ssl']['previous'] = $_SESSION[self::ARRAY_KEY]['cookie_ssl']['value'];
-				$_SESSION[self::ARRAY_KEY]['cookie_ssl']['value'] = $this->getRandomString();
+				$_SESSION[self::ARRAY_KEY]['cookie_ssl']['value'] = $precomputed_random2;
 				$_SESSION[self::ARRAY_KEY]['cookie_ssl']['last_refresh'] = time();
 				$_SESSION[self::ARRAY_KEY]['cookie_ssl']['need_refresh'] = false;
 			}
