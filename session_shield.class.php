@@ -14,7 +14,7 @@ class Session_Shield
 	/**
 	 * Class constants
 	 */
-	const ARRAY_KEY = 'XE_SESSION_SHIELD_v1';
+	const ARRAY_KEY = 'XE_SESSION_SHIELD';
 	const COOKIE_NAME = 'xe_shield';
 	const COOKIE_NAME_SSL = 'xe_shield_ssl';
 	const COOKIE_HASH_ALGO = 'sha1';
@@ -101,7 +101,7 @@ class Session_Shield
 		if(!$this->isSessionActive()) return false;
 		if(!$this->isShieldEnabled()) return true;
 		
-		if(!isset($_SESSION[self::ARRAY_KEY]))
+		if(!isset($_SESSION[self::ARRAY_KEY]['login']))
 		{
 			$_SESSION[self::ARRAY_KEY] = array(
 				'init' => self::INIT_LEVEL_NONE,
