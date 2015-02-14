@@ -21,8 +21,8 @@ class Session_Shield
 	const INIT_LEVEL_NONE = 0;
 	const INIT_LEVEL_BASIC = 1;
 	const INIT_LEVEL_SSL = 2;
-	const REFRESH_TIMEOUT = 300;
-	const GRACE_PERIOD = 30;
+	const REFRESH_TIMEOUT = 600;
+	const GRACE_PERIOD = 60;
 	
 	/**
 	 * Check if the session is active.
