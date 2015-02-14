@@ -265,7 +265,7 @@ class Session_Shield
 		{
 			$precomputed_random1 = $this->getRandomString();
 			$precomputed_random2 = $this->isSecureRequest() ? $this->getRandomString() : null;
-			$previous_session = $_SESSION;
+			$previous_session = $_SESSION[self::ARRAY_KEY];
 			if(headers_sent())
 			{
 				return false;
@@ -301,7 +301,7 @@ class Session_Shield
 			$cookie_status = $this->setShieldCookies();
 			if(!$cookie_status)
 			{
-				$_SESSION = $previous_session;
+				$_SESSION[self::ARRAY_KEY] = $previous_session;
 				session_write_close();
 				session_start();
 			}
