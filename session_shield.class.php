@@ -72,16 +72,23 @@ class Session_Shield
 	}
 	
 	/**
-	 * Check if the user's browser is known to forget session cookies.
+	 * Check if the current request uses AJAX.
 	 * 
 	 * @return bool
 	 */
-	public function isStupidBrowser()
+	public function isAjax()
 	{
-		$ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-		if(strpos($ua, 'MSIE 8.0') !== false || strpos($ua, 'Trident/4.0') !== false) return true;
-		if(strpos($ua, 'BlackBerry') !== false) return true;
-		return false;
+		return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
+	}
+	
+	/**
+	 * Check if the current request uses Flash.
+	 * 
+	 * @return bool
+	 */
+	public function isFlash()
+	{
+		return (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/shockwave\s?flash/i', $_SERVER['HTTP_USER_AGENT']));
 	}
 	
 	/**
@@ -245,7 +252,7 @@ class Session_Shield
 	 */
 	public function refreshSession()
 	{
-		if($this->isStupidBrowser() && $_SERVER['REQUEST_METHOD'] !== 'GET')
+		if($_SERVER['REQUEST_METHOD'] !== 'GET' || $this->isAjax() || $this->isFlash())
 		{
 			$_SESSION[self::ARRAY_KEY]['cookie']['need_refresh'] = true;
 			if($this->isSecureRequest())
