@@ -155,14 +155,24 @@ class Session_Shield
 	 */
 	public function checkCookies()
 	{
-		if($_SESSION[self::ARRAY_KEY]['init'] == self::INIT_LEVEL_NONE) return false;
-		
 		$cookie = isset($_COOKIE[self::COOKIE_NAME]) ? $_COOKIE[self::COOKIE_NAME] : 'none';
 		$cookie_ssl = isset($_COOKIE[self::COOKIE_NAME_SSL]) ? $_COOKIE[self::COOKIE_NAME_SSL] : 'none';
+		$resend_cookies = false;
 		
-		if($cookie !== $_SESSION[self::ARRAY_KEY]['cookie']['value'] &&
-			($cookie !== $_SESSION[self::ARRAY_KEY]['cookie']['previous'] ||
-			$_SESSION[self::ARRAY_KEY]['cookie']['last_refresh'] < time() - self::GRACE_PERIOD))
+		if($_SESSION[self::ARRAY_KEY]['init'] == self::INIT_LEVEL_NONE)
+		{
+			return true;
+		}
+		elseif($cookie === $_SESSION[self::ARRAY_KEY]['cookie']['value'])
+		{
+			// pass
+		}
+		elseif($cookie === $_SESSION[self::ARRAY_KEY]['cookie']['previous'] &&
+			$_SESSION[self::ARRAY_KEY]['cookie']['last_refresh'] > time() - self::GRACE_PERIOD)
+		{
+			$resend_cookies = true;
+		}
+		else
 		{
 			$this->destroySession();
 			return false;
@@ -173,17 +183,32 @@ class Session_Shield
 			if($_SESSION[self::ARRAY_KEY]['init'] < self::INIT_LEVEL_SSL)
 			{
 				$this->refreshSession();
+				return true;
 			}
-			elseif($cookie_ssl !== $_SESSION[self::ARRAY_KEY]['cookie_ssl']['value'] &&
-				($cookie_ssl !== $_SESSION[self::ARRAY_KEY]['cookie_ssl']['previous'] ||
-				$_SESSION[self::ARRAY_KEY]['cookie_ssl']['last_refresh'] < time() - self::GRACE_PERIOD))
+			elseif($cookie_ssl === $_SESSION[self::ARRAY_KEY]['cookie_ssl']['value'])
+			{
+				// pass
+			}
+			elseif($cookie_ssl === $_SESSION[self::ARRAY_KEY]['cookie_ssl']['previous'] &&
+				$_SESSION[self::ARRAY_KEY]['cookie_ssl']['last_refresh'] > time() - self::GRACE_PERIOD)
+			{
+				$resend_cookies = true;
+			}
+			else
 			{
 				$this->destroySession();
 				return false;
 			}
 		}
 		
-		return true;
+		if($resend_cookies)
+		{
+			return $this->setShieldCookies();
+		}
+		else
+		{
+			return true;
+		}
 	}
 	
 	/**
