@@ -222,8 +222,8 @@ class Session_Shield
 			($this->getMemberSrl() !== $_SESSION[self::ARRAY_KEY]['login']) ||
 			($_SESSION[self::ARRAY_KEY]['cookie']['need_refresh']) ||
 			($_SESSION[self::ARRAY_KEY]['cookie_ssl']['need_refresh'] && $this->isSecureRequest()) ||
-			($_SESSION[self::ARRAY_KEY]['cookie']['last_refresh'] < time() - self::REFRESH_TIMEOUT) ||
-			($_SESSION[self::ARRAY_KEY]['cookie_ssl']['last_refresh'] < time() - self::REFRESH_TIMEOUT && $this->isSecureRequest()))
+			(self::REFRESH_TIMEOUT > 0 && $_SESSION[self::ARRAY_KEY]['cookie']['last_refresh'] < time() - self::REFRESH_TIMEOUT) ||
+			(self::REFRESH_TIMEOUT > 0 && $_SESSION[self::ARRAY_KEY]['cookie_ssl']['last_refresh'] < time() - self::REFRESH_TIMEOUT && $this->isSecureRequest()))
 		{
 			$this->refreshSession();
 		}
