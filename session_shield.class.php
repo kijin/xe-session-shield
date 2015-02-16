@@ -21,6 +21,7 @@ class Session_Shield
 	const INIT_LEVEL_NONE = 0;
 	const INIT_LEVEL_BASIC = 1;
 	const INIT_LEVEL_SSL = 2;
+	const EXTRA_LIFETIME = 14400;
 	const REFRESH_TIMEOUT = 600;
 	const GRACE_PERIOD = 60;
 	
@@ -238,11 +239,11 @@ class Session_Shield
 	public function setShieldCookies()
 	{
 		$params = session_get_cookie_params();
-		
+		$expiry = $params['lifetime'] > 0 ? (time() + $params['lifetime'] + self::EXTRA_LIFETIME) : 0;
 		if($_SESSION[self::ARRAY_KEY]['cookie']['value'] !== null)
 		{
 			$cookie_status = @setcookie(self::COOKIE_NAME, $_SESSION[self::ARRAY_KEY]['cookie']['value'],
-				$params['lifetime'], $params['path'], $params['domain'], false, true);
+				$expiry, $params['path'], $params['domain'], false, true);
 			if($cookie_status)
 			{
 				$_SESSION[self::ARRAY_KEY]['init'] = max($_SESSION[self::ARRAY_KEY]['init'], self::INIT_LEVEL_BASIC);
@@ -256,7 +257,7 @@ class Session_Shield
 		if($_SESSION[self::ARRAY_KEY]['cookie_ssl']['value'] !== null && $this->isSecureRequest())
 		{
 			$cookie_status = @setcookie(self::COOKIE_NAME_SSL, $_SESSION[self::ARRAY_KEY]['cookie_ssl']['value'],
-				$params['lifetime'], $params['path'], $params['domain'], true, true);
+				$expiry, $params['path'], $params['domain'], true, true);
 			if($cookie_status)
 			{
 				$_SESSION[self::ARRAY_KEY]['init'] = max($_SESSION[self::ARRAY_KEY]['init'], self::INIT_LEVEL_SSL);
