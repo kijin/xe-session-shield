@@ -3,6 +3,7 @@
 /**
  * @file session_shield.class.php
  * @author Kijin Sung <kijin@kijinsung.com>
+ * @license LGPL v2.1 <http://www.gnu.org/licenses/lgpl-2.1.html>
  * @brief Session Shield class
  * 
  * This class contains all the session management features of the Session Shield addon.
