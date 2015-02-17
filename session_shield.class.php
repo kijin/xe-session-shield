@@ -111,7 +111,7 @@ class Session_Shield
 	 */
 	public function initialize()
 	{
-		if(!$this->isSessionActive()) return false;
+		if(!$this->isSessionActive()) return true;
 		if(!$this->isShieldEnabled()) return true;
 		
 		if(!isset($_SESSION[self::ARRAY_KEY]['login']))
