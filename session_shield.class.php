@@ -368,7 +368,7 @@ class Session_Shield
 		{
 			$_SESSION[self::ARRAY_KEY]['csrftoken'] = $this->getRandomString();
 		}
-		Context::loadFile(array('./addons/session_shield/session_shield.csrftoken.js', 'body', null, null));
+		Context::loadFile(array('./addons/session_shield/session_shield.csrftoken.js', 'head', null, -10000));
 		$html .= '<div id="xe_shield_csrftoken" data-token="' . $_SESSION[self::ARRAY_KEY]['csrftoken'] . '"></div>';
 	}
 	
@@ -379,25 +379,27 @@ class Session_Shield
 	 */
 	public function checkCSRFToken()
 	{
-		if($this->isShieldEnabled() && $_SERVER['REQUEST_METHOD'] !== 'GET' && isset($_SESSION[self::ARRAY_KEY]['csrftoken']))
+		if($_SERVER['REQUEST_METHOD'] === 'GET' || !$this->isShieldEnabled() || !isset($_SESSION[self::ARRAY_KEY]['csrftoken']))
 		{
-			if(Context::get('xe_shield_csrftoken') === $_SESSION[self::ARRAY_KEY]['csrftoken'])
+			return true;
+		}
+		
+		if(Context::get('xe_shield_csrftoken') === $_SESSION[self::ARRAY_KEY]['csrftoken'])
+		{
+			return true;
+		}
+		else
+		{
+			$backtrace = debug_backtrace();
+			foreach ($backtrace as $item)
 			{
-				return true;
-			}
-			else
-			{
-				$backtrace = debug_backtrace();
-				foreach ($backtrace as $item)
+				if ($item['class'] === 'ModuleHandler' && $item['object'])
 				{
-					if ($item['class'] === 'ModuleHandler' && $item['object'])
-					{
-						$item['object']->error = 'Session Shield: CSRF Token Mismatch';
-						break;
-					}
+					$item['object']->error = 'Session Shield: CSRF Token Mismatch';
+					break;
 				}
-				return false;
 			}
+			return false;
 		}
 	}
 	
