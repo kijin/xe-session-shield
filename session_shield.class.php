@@ -119,6 +119,7 @@ class Session_Shield
 			$_SESSION[self::ARRAY_KEY] = array(
 				'init' => self::INIT_LEVEL_NONE,
 				'login' => $this->getMemberSrl(),
+				'csrftoken' => $this->getRandomString(),
 				'cookie' => array(
 					'value' => $this->getRandomString(),
 					'previous' => null,
@@ -355,6 +356,50 @@ class Session_Shield
 		
 		$_SESSION = array();
 		return true;
+	}
+	
+	/**
+	 * Insert a CSRF token to a web page.
+	 * 
+	 * @return void
+	 */
+	public function insertCSRFToken(&$html)
+	{
+		if(!isset($_SESSION[self::ARRAY_KEY]['csrftoken']))
+		{
+			$_SESSION[self::ARRAY_KEY]['csrftoken'] = $this->getRandomString();
+		}
+		Context::loadFile(array('./addons/session_shield/session_shield.csrftoken.js', 'body', null, null));
+		$html .= '<div id="xe_shield_csrftoken" data-token="' . $_SESSION[self::ARRAY_KEY]['csrftoken'] . '"></div>';
+	}
+	
+	/**
+	 * Check the CSRF token.
+	 * 
+	 * @return bool
+	 */
+	public function checkCSRFToken()
+	{
+		if($this->isShieldEnabled() && $_SERVER['REQUEST_METHOD'] !== 'GET' && isset($_SESSION[self::ARRAY_KEY]['csrftoken']))
+		{
+			if(Context::get('xe_shield_csrftoken') === $_SESSION[self::ARRAY_KEY]['csrftoken'])
+			{
+				return true;
+			}
+			else
+			{
+				$backtrace = debug_backtrace();
+				foreach ($backtrace as $item)
+				{
+					if ($item['class'] === 'ModuleHandler' && $item['object'])
+					{
+						$item['object']->error = 'Session Shield: CSRF Token Mismatch';
+						break;
+					}
+				}
+				return false;
+			}
+		}
 	}
 	
 	/**

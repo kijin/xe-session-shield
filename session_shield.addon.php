@@ -14,8 +14,23 @@
  */
 
 if(!defined('__XE__')) exit;
-if($called_position !== 'before_module_init') return;
 
 require_once 'session_shield.class.php';
-$shield = new Session_Shield();
-$shield->initialize();
+
+switch($called_position)
+{
+	case 'before_module_init':
+		$shield = new Session_Shield();
+		$shield->initialize();
+		$shield->checkCSRFToken();
+		return;
+	
+	case 'before_display_content':
+		if(Context::getResponseMethod() != 'HTML') return;
+		$shield = new Session_Shield();
+		$shield->insertCSRFToken($output);
+		return;
+		
+	default:
+		return;
+}
