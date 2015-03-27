@@ -119,7 +119,6 @@ class Session_Shield
 			$_SESSION[self::ARRAY_KEY] = array(
 				'init' => self::INIT_LEVEL_NONE,
 				'login' => $this->getMemberSrl(),
-				'csrftoken' => $this->getRandomString(),
 				'cookie' => array(
 					'value' => $this->getRandomString(),
 					'previous' => null,
