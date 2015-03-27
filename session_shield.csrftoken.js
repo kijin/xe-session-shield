@@ -3,6 +3,9 @@
  * @author Kijin Sung <kijin@kijinsung.com>
  * @license LGPL v2.1 <http://www.gnu.org/licenses/lgpl-2.1.html>
  * @brief Session Shield addon - CSRF token handling script
+ * 
+ * This script adds a CSRF token to every POST form on the web page,
+ * and also injects the token into XE's various AJAX functions.
  */
 (function($) {
 	
@@ -48,7 +51,7 @@
 		
 		var token = $("#xe_shield_csrftoken").data("token");
 		if ((typeof token === "string" || token instanceof String) && token.length > 0) {
-			$('form[method="post"],form[method="POST"]').each(function() {
+			$("form[method='post']").each(function() {
 				$(this).append('<input type="hidden" name="xe_shield_csrftoken" value="' + token + '" />');
 			});
 		}
