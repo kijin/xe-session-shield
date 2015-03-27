@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang>
+	<item name="msg_session_shield_csrf_token_mismatch">
+		<value xml:lang="ko"><![CDATA[세션 쉴드: CSRF 토큰이 일치하지 않습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Session Shield: CSRF token mismatch.]]></value>
+		<value xml:lang="jp"><![CDATA[セッションシールド：CSRFトークンが一致しません。]]></value>
+		<value xml:lang="zh-CN"><![CDATA[会议盾：CSRF令牌不匹配。]]></value>
+	</item>
+</lang>

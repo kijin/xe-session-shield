@@ -395,7 +395,8 @@ class Session_Shield
 			{
 				if ($item['class'] === 'ModuleHandler' && $item['object'])
 				{
-					$item['object']->error = 'Session Shield: CSRF Token Mismatch';
+					Context::loadLang(_XE_PATH_ . 'addons/session_shield/lang');
+					$item['object']->error = Context::getLang('msg_session_shield_csrf_token_mismatch');
 					break;
 				}
 			}
