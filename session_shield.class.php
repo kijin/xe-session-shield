@@ -388,6 +388,10 @@ class Session_Shield
 		{
 			return true;
 		}
+		elseif(isset($_SERVER['HTTP_X_SHIELD_CSRFTOKEN']) && $_SERVER['HTTP_X_SHIELD_CSRFTOKEN'] === $_SESSION[self::ARRAY_KEY]['csrftoken'])
+		{
+			return true;
+		}
 		else
 		{
 			$backtrace = debug_backtrace();

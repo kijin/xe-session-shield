@@ -44,6 +44,13 @@
 		$.fn.xe_shield_backup.exec_xml(module, act, params, callback_func, response_tags, callback_func_arg, fo_obj);
 	};
 	
+	// Add the token to every AJAX call, In case third-party code calls $.ajax() directly.
+	$.ajaxPrefilter(function(options) {
+		if(!options.url || options.url.indexOf(window.default_url) !== 0) return;
+		if(!options.headers) options.headers = {};
+		options.headers["X-Shield-CSRFToken"] = $("meta[name='xe-shield-csrftoken']").attr("content");
+	});
+	
 	// Add the token to every POST form on the web page.
 	$(function() {
 		var token = $("meta[name='xe-shield-csrftoken']").attr("content");
