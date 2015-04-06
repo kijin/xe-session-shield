@@ -362,14 +362,14 @@ class Session_Shield
 	 * 
 	 * @return void
 	 */
-	public function insertCSRFToken(&$html)
+	public function insertCSRFToken()
 	{
 		if(!isset($_SESSION[self::ARRAY_KEY]['csrftoken']))
 		{
 			$_SESSION[self::ARRAY_KEY]['csrftoken'] = $this->getRandomString();
 		}
+		Context::addHtmlHeader('<meta name="xe-shield-csrftoken" content="' . $_SESSION[self::ARRAY_KEY]['csrftoken'] . '" />');
 		Context::loadFile(array('./addons/session_shield/session_shield.csrftoken.js', 'head', null, -10000));
-		$html .= '<div id="xe_shield_csrftoken" data-token="' . $_SESSION[self::ARRAY_KEY]['csrftoken'] . '"></div>';
 	}
 	
 	/**

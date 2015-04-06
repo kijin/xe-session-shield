@@ -20,7 +20,7 @@
 		},
 		addtoken : function(data) {
 			if(typeof data.xe_shield_csrftoken === "undefined") {
-				data.xe_shield_csrftoken = $("#xe_shield_csrftoken").data("token");
+				data.xe_shield_csrftoken = $("meta[name='xe-shield-csrftoken']").attr("content");
 			}
 			return data;
 		},
@@ -46,7 +46,7 @@
 	
 	// Add the token to every POST form on the web page.
 	$(function() {
-		var token = $("#xe_shield_csrftoken").data("token");
+		var token = $("meta[name='xe-shield-csrftoken']").attr("content");
 		$("form[method='post']").each(function() {
 			$(this).append('<input type="hidden" name="xe_shield_csrftoken" value="' + token + '" />');
 		});

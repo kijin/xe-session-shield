@@ -31,7 +31,7 @@ switch($called_position)
 	case 'before_display_content':
 		if(Context::getResponseMethod() != 'HTML') return;
 		$shield = new Session_Shield();
-		$shield->insertCSRFToken($output);
+		$shield->insertCSRFToken();
 		return;
 		
 	default:
