@@ -9,6 +9,9 @@
  */
 (function($) {
 	
+	// Get the CSRF token.
+	var token = $("meta[name='XE-Shield-CSRFToken']").attr("content");
+	
 	// Define a simple jQuery plugin with utility functions and backups of XE's AJAX functions.
 	$.fn.xe_shield_backup = {
 		arr2obj : function(arr) {
@@ -20,7 +23,7 @@
 		},
 		addtoken : function(data) {
 			if(typeof data.xe_shield_csrftoken === "undefined") {
-				data.xe_shield_csrftoken = $("meta[name='xe-shield-csrftoken']").attr("content");
+				data.xe_shield_csrftoken = token;
 			}
 			return data;
 		},
@@ -48,12 +51,11 @@
 	$.ajaxPrefilter(function(options) {
 		if(!options.url || options.url.indexOf(window.default_url) !== 0) return;
 		if(!options.headers) options.headers = {};
-		options.headers["X-Shield-CSRFToken"] = $("meta[name='xe-shield-csrftoken']").attr("content");
+		options.headers["X-Shield-CSRFToken"] = token;
 	});
 	
 	// Add the token to every POST form on the web page.
 	$(function() {
-		var token = $("meta[name='xe-shield-csrftoken']").attr("content");
 		$("form[method='post']").each(function() {
 			$(this).append('<input type="hidden" name="xe_shield_csrftoken" value="' + token + '" />');
 		});

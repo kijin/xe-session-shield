@@ -368,7 +368,7 @@ class Session_Shield
 		{
 			$_SESSION[self::ARRAY_KEY]['csrftoken'] = $this->getRandomString();
 		}
-		Context::addHtmlHeader('<meta name="xe-shield-csrftoken" content="' . $_SESSION[self::ARRAY_KEY]['csrftoken'] . '" />');
+		Context::addMetaTag('XE-Shield-CSRFToken', $_SESSION[self::ARRAY_KEY]['csrftoken']);
 		Context::loadFile(array('./addons/session_shield/session_shield.csrftoken.js', 'head', null, -10000));
 	}
 	
