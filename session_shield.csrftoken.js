@@ -70,6 +70,7 @@
 			return $(this).data("csrftoken-checked", "Y");
 		};
 		$("form[method='post']").xe_shield_add_hidden_input();
+		$(document).on("submit", "form[method='post']", $.fn.xe_shield_add_hidden_input);
 		$(document).on("focus", "form input", function() {
 			$(this).parents("form").xe_shield_add_hidden_input();
 		});
