@@ -56,8 +56,22 @@
 	
 	// Add the token to every POST form on the web page.
 	$(function() {
-		$("form[method='post']").each(function() {
-			$(this).append('<input type="hidden" name="xe_shield_csrftoken" value="' + token + '" />');
+		$.fn.xe_shield_add_hidden_input = function() {
+			if($(this).data("csrftoken-checked") === "Y") {
+				return this;
+			}
+			if($(this).attr("action").indexOf(window.default_url) !== 0) {
+				return $(this).data("csrftoken-checked", "Y");
+			}
+			if($(this).attr("method").toLowerCase() !== "post") {
+				return $(this).data("csrftoken-checked", "Y");
+			}
+			$("<input />").attr({ type: "hidden", name: "xe_shield_csrftoken", value: token }).appendTo($(this));
+			return $(this).data("csrftoken-checked", "Y");
+		};
+		$("form[method='post']").xe_shield_add_hidden_input();
+		$(document).on("focus", "form input", function() {
+			$(this).parents("form").xe_shield_add_hidden_input();
 		});
 		
 	});
