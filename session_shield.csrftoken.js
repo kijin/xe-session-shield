@@ -60,7 +60,7 @@
 			if($(this).data("csrftoken-checked") === "Y") {
 				return this;
 			}
-			if($(this).attr("action") && $(this).attr("action").indexOf(window.default_url) !== 0) {
+			if($(this).attr("action") && $(this).attr("action").match(/^(https?:)?\/\//i) && $(this).attr("action").indexOf(window.default_url) !== 0) {
 				return $(this).data("csrftoken-checked", "Y");
 			}
 			if($(this).attr("method") && $(this).attr("method").toLowerCase() !== "post") {
