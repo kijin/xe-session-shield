@@ -8,12 +8,80 @@
     <description xml:lang="en">This add-on improves session security.</description>
     <description xml:lang="jp">セッションのセキュリティを強化します。</description>
     <description xml:lang="zh-CN">要加强安全会话。</description>
-    <version>1.7</version>
-    <date>2015-04-20</date>
+    <version>1.8</version>
+    <date>2015-05-20</date>
     <author email_address="kijin@kijinsung.com" link="https://github.com/kijin">
         <name xml:lang="ko">Kijin Sung</name>
         <name xml:lang="en">Kijin Sung</name>
         <name xml:lang="jp">Kijin Sung</name>
         <name xml:lang="zh-CN">Kijin Sung</name>
     </author>
+    <extra_vars>
+        <var name="refresh_timeout" type="select">
+            <title xml:lang="ko">세션 식별자 갱신 주기</title>
+            <title xml:lang="en">Session ID refresh interval</title>
+            <title xml:lang="jp">セッションID更新周期</title>
+            <title xml:lang="zh-CN">会话ID更新周期</title>
+            <options value="600">
+                <title xml:lang="ko">10분 (권장)</title>
+                <title xml:lang="en">10 minutes (recommended)</title>
+                <title xml:lang="jp">10分 (推奨)</title>
+                <title xml:lang="zh-CN">10分钟 (推荐)</title>
+            </options>
+            <options value="1200">
+                <title xml:lang="ko">20분</title>
+                <title xml:lang="en">20 minutes</title>
+                <title xml:lang="jp">20分</title>
+                <title xml:lang="zh-CN">20分钟</title>
+            </options>
+            <options value="1800">
+                <title xml:lang="ko">30분</title>
+                <title xml:lang="en">30 minutes</title>
+                <title xml:lang="jp">30分</title>
+                <title xml:lang="zh-CN">30分钟</title>
+            </options>
+            <options value="3600">
+                <title xml:lang="ko">60분</title>
+                <title xml:lang="en">60 minutes</title>
+                <title xml:lang="jp">60分</title>
+                <title xml:lang="zh-CN">60分钟</title>
+            </options>
+            <options value="5400">
+                <title xml:lang="ko">90분</title>
+                <title xml:lang="en">90 minutes</title>
+                <title xml:lang="jp">90分</title>
+                <title xml:lang="zh-CN">90分钟</title>
+            </options>
+            <options value="1073741824">
+                <title xml:lang="ko">갱신하지 않음</title>
+                <title xml:lang="en">Do not refresh</title>
+                <title xml:lang="jp">更新しない</title>
+                <title xml:lang="zh-CN">不要更新</title>
+            </options>
+        </var>
+        <var name="csrf_protection" type="select">
+            <title xml:lang="ko">CSRF 방어 기능</title>
+            <title xml:lang="en">CSRF Protection</title>
+            <title xml:lang="jp">CSRF防御機能</title>
+            <title xml:lang="zh-CN">CSRF防御</title>
+            <options value="referer">
+                <title xml:lang="ko">리퍼러 헤더 사용 (권장)</title>
+                <title xml:lang="en">Use referer header (recommended)</title>
+                <title xml:lang="jp">Refererヘッダーの使用 (推奨)</title>
+                <title xml:lang="zh-CN">使用Referer头 (推荐)</title>
+            </options>
+            <options value="token">
+                <title xml:lang="ko">토큰 사용</title>
+                <title xml:lang="en">Use token</title>
+                <title xml:lang="jp">トークンの使用</title>
+                <title xml:lang="zh-CN">使用令牌</title>
+            </options>
+            <options value="disabled">
+                <title xml:lang="ko">사용하지 않음</title>
+                <title xml:lang="en">Do not use</title>
+                <title xml:lang="jp">使用しない</title>
+                <title xml:lang="zh-CN">未使用</title>
+            </options>
+        </var>
+    </extra_vars>
 </addon>

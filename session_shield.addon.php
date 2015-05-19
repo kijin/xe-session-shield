@@ -24,12 +24,13 @@ switch($called_position)
 {
 	case 'before_module_init':
 		$shield = new Session_Shield();
-		$shield->initialize();
-		$shield->checkCSRFToken();
+		$shield->initialize($addon_info->refresh_timeout);
+		$shield->checkCSRFToken($addon_info->csrf_protection);
 		return;
 	
 	case 'before_display_content':
 		if(Context::getResponseMethod() != 'HTML') return;
+		if($addon_info->csrf_protection !== 'token') return;
 		$shield = new Session_Shield();
 		$shield->insertCSRFToken();
 		return;

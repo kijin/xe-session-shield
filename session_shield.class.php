@@ -19,12 +19,18 @@ class Session_Shield
 	const COOKIE_NAME = 'xe_shield';
 	const COOKIE_NAME_SSL = 'xe_shield_ssl';
 	const COOKIE_HASH_ALGO = 'sha1';
+	const CSRF_PROTECTION = 'referer';
 	const INIT_LEVEL_NONE = 0;
 	const INIT_LEVEL_BASIC = 1;
 	const INIT_LEVEL_SSL = 2;
 	const EXTRA_LIFETIME = 14400;
 	const REFRESH_TIMEOUT = 600;
 	const GRACE_PERIOD = 120;
+	
+	/**
+	 * Properties
+	 */
+	public $refresh_timeout = self::REFRESH_TIMEOUT;
 	
 	/**
 	 * Check if the session is active.
@@ -107,10 +113,16 @@ class Session_Shield
 	/**
 	 * Initialize session variables for Session Shield.
 	 * 
+	 * @param int $refresh_timeout Session ID refresh interval
 	 * @return bool
 	 */
-	public function initialize()
+	public function initialize($refresh_timeout = self::REFRESH_TIMEOUT)
 	{
+		if($refresh_timeout > 0)
+		{
+			$this->refresh_timeout = intval($refresh_timeout);
+		}
+		
 		if(!$this->isSessionActive()) return true;
 		if(!$this->isShieldEnabled()) return true;
 		
@@ -224,8 +236,8 @@ class Session_Shield
 			($this->getMemberSrl() !== $_SESSION[self::ARRAY_KEY]['login']) ||
 			($_SESSION[self::ARRAY_KEY]['cookie']['need_refresh']) ||
 			($_SESSION[self::ARRAY_KEY]['cookie_ssl']['need_refresh'] && $this->isSecureRequest()) ||
-			(self::REFRESH_TIMEOUT > 0 && $_SESSION[self::ARRAY_KEY]['cookie']['last_refresh'] < time() - self::REFRESH_TIMEOUT) ||
-			(self::REFRESH_TIMEOUT > 0 && $_SESSION[self::ARRAY_KEY]['cookie_ssl']['last_refresh'] < time() - self::REFRESH_TIMEOUT && $this->isSecureRequest()))
+			($this->refresh_timeout > 0 && $_SESSION[self::ARRAY_KEY]['cookie']['last_refresh'] < time() - $this->refresh_timeout) ||
+			($this->refresh_timeout > 0 && $_SESSION[self::ARRAY_KEY]['cookie_ssl']['last_refresh'] < time() - $this->refresh_timeout && $this->isSecureRequest()))
 		{
 			$this->refreshSession();
 		}
@@ -375,11 +387,27 @@ class Session_Shield
 	/**
 	 * Check the CSRF token.
 	 * 
+	 * @param string $protection Level of protection to use
 	 * @return bool
 	 */
-	public function checkCSRFToken()
+	public function checkCSRFToken($protection = self::CSRF_PROTECTION)
 	{
+		if(!$protection)
+		{
+			$protection = self::CSRF_PROTECTION;
+		}
+		
+		if($protection === 'disabled')
+		{
+			return true;
+		}
+		
 		if($_SERVER['REQUEST_METHOD'] === 'GET' || !$this->isShieldEnabled() || !isset($_SESSION[self::ARRAY_KEY]['csrftoken']))
+		{
+			return true;
+		}
+		
+		if($protection === 'referer' && checkCSRF())
 		{
 			return true;
 		}
