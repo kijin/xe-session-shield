@@ -448,9 +448,15 @@ class Session_Shield
 		{
 			return hash(self::COOKIE_HASH_ALGO, openssl_random_pseudo_bytes(20));
 		}
-		elseif (function_exists('mcrypt_create_iv') && (!$is_windows || version_compare(PHP_VERSION, '5.3.7', '>=')))
+		elseif (!$is_windows && ($fp = @fopen('/dev/urandom', 'rb')))
 		{
-			return hash(self::COOKIE_HASH_ALGO, mcrypt_create_iv(20, MCRYPT_DEV_URANDOM));
+			if (function_exists('stream_set_read_buffer'))
+			{
+				stream_set_read_buffer($fp, 0);
+			}
+			$result = fread($fp, 20);
+			fclose($fp);
+			return hash(self::COOKIE_HASH_ALGO, $result);
 		}
 		else
 		{
