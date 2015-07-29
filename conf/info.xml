@@ -59,6 +59,24 @@
                 <title xml:lang="zh-CN">不要更新</title>
             </options>
         </var>
+        <var name="xss_protection" type="select">
+            <title xml:lang="ko">XSS 방어 기능</title>
+            <title xml:lang="en">XSS Protection</title>
+            <title xml:lang="jp">XSS防御機能</title>
+            <title xml:lang="zh-CN">XSS防御</title>
+            <options value="enabled">
+                <title xml:lang="ko">사용함 (권장)</title>
+                <title xml:lang="en">Enabled (recommended)</title>
+                <title xml:lang="jp">使用 (推奨)</title>
+                <title xml:lang="zh-CN">使用 (推荐)</title>
+            </options>
+            <options value="disabled">
+                <title xml:lang="ko">사용하지 않음</title>
+                <title xml:lang="en">Disabled</title>
+                <title xml:lang="jp">使用しない</title>
+                <title xml:lang="zh-CN">未使用</title>
+            </options>
+        </var>
         <var name="csrf_protection" type="select">
             <title xml:lang="ko">CSRF 방어 기능</title>
             <title xml:lang="en">CSRF Protection</title>
@@ -78,7 +96,7 @@
             </options>
             <options value="disabled">
                 <title xml:lang="ko">사용하지 않음</title>
-                <title xml:lang="en">Do not use</title>
+                <title xml:lang="en">Disabled</title>
                 <title xml:lang="jp">使用しない</title>
                 <title xml:lang="zh-CN">未使用</title>
             </options>

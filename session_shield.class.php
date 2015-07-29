@@ -19,6 +19,7 @@ class Session_Shield
 	const COOKIE_NAME = 'xe_shield';
 	const COOKIE_NAME_SSL = 'xe_shield_ssl';
 	const COOKIE_HASH_ALGO = 'sha1';
+	const XSS_PROTECTION_CHAR = "\xEF\xBB\xBF";
 	const CSRF_PROTECTION = 'referer';
 	const INIT_LEVEL_NONE = 0;
 	const INIT_LEVEL_BASIC = 1;
@@ -367,6 +368,46 @@ class Session_Shield
 		
 		$_SESSION = array();
 		return true;
+	}
+	
+	/**
+	 * Filter input values for XSS
+	 */
+	public function filterXSS($protection = 'enabled')
+	{
+		if($protection !== 'enabled')
+		{
+			return true;
+		}
+		
+		$logged_info = Context::get('logged_info');
+		if ($logged_info && $logged_info->is_admin === 'Y')
+		{
+			return true;
+		}
+		
+		$vars = Context::getRequestVars();
+		
+		foreach($vars as $key => $val)
+		{
+			if($key === 'content')
+			{
+				continue;
+			}
+			
+			$val = preg_replace(array(
+					'/<(\/?)(script|form|iframe)/isU',
+					'/(on)(load|input|mouse(?:over|in|out)|key(?:down|up|press)|click|change|submit)(\s?=\s?["\']?)/isU',
+					'/(src|href)(\s?=\s?["\']?)javascript:/isU',
+				),
+				array(
+					'<$1' . self::XSS_PROTECTION_CHAR . '$2',
+					'$1' . self::XSS_PROTECTION_CHAR . '$2$3',
+					'$1$2' . self::XSS_PROTECTION_CHAR . 'xss:',
+				),
+				$val);
+			Context::set($key, $val, true);
+		}
 	}
 	
 	/**

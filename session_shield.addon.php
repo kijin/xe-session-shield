@@ -25,6 +25,7 @@ switch($called_position)
 	case 'before_module_init':
 		$shield = new Session_Shield();
 		$shield->initialize($addon_info->refresh_timeout);
+		$shield->filterXSS($addon_info->xss_protection);
 		$shield->checkCSRFToken($addon_info->csrf_protection);
 		return;
 	
