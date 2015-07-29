@@ -1,7 +1,7 @@
 /**
  * @file session_shield.csrftoken.js
  * @author Kijin Sung <kijin@kijinsung.com>
- * @license LGPL v2.1 <http://www.gnu.org/licenses/lgpl-2.1.html>
+ * @license GPLv2 or Later <https://www.gnu.org/licenses/gpl-2.0.html>
  * @brief Session Shield addon - CSRF token handling script
  * 
  * This script adds a CSRF token to every POST form on the web page,
