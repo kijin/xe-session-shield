@@ -420,10 +420,6 @@ class Session_Shield
 		{
 			return true;
 		}
-		elseif(checkCSRF())
-		{
-			return true;
-		}
 		else
 		{
 			$backtrace = debug_backtrace();
