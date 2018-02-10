@@ -8,8 +8,8 @@
     <description xml:lang="en">This add-on improves session security.</description>
     <description xml:lang="jp">セッションのセキュリティを強化します。</description>
     <description xml:lang="zh-CN">要加强安全会话。</description>
-    <version>2.0</version>
-    <date>2015-07-30</date>
+    <version>2.0.1</version>
+    <date>2018-01-10</date>
     <author email_address="kijin@kijinsung.com" link="https://github.com/kijin">
         <name xml:lang="ko">Kijin Sung</name>
         <name xml:lang="en">Kijin Sung</name>
