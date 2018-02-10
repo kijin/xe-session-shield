@@ -386,11 +386,23 @@ class Session_Shield
 			return true;
 		}
 		
+		$oContext = Context::getInstance();
 		$vars = Context::getRequestVars();
-		
+
 		foreach($vars as $key => $val)
 		{
-			if($key === 'content')
+			if ($key === 'is_logged' || $key === 'logged_info' || $key === 'member_info')
+			{
+				unset($oContext->get_vars->{$key});
+				continue;
+			}
+			
+			if ($key === 'content' && $vars->act && preg_match('/^proc[A-Z][A-Za-z0-9_]+Insert(?:Document|Comment)$/', $vars->act));
+			{
+				continue;
+			}
+			
+			if (!is_scalar($val))
 			{
 				continue;
 			}
